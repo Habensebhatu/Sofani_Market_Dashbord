@@ -1,0 +1,4 @@
+.custom-card {
+    border-radius: 16px; /* Adjust the value as needed */
+    overflow: hidden; /* This ensures the card's content respects the border radius */
+}

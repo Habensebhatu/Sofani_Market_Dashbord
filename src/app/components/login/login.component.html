@@ -1,0 +1,25 @@
+<section class="h-screen flex items-center justify-center">
+    <div class="w-full max-w-md mx-auto">
+        <mat-card class="shadow-lg">
+            <mat-card-content class="text-center">
+                <div class="mb-5">
+                    <h1>Login</h1>
+                </div>
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+                    <mat-form-field class="w-full">
+                        <mat-label>Gebruikersnaam</mat-label>
+                        <input matInput formControlName="username" type="text">
+                    </mat-form-field>
+                    <mat-form-field class="w-full">
+                        <mat-label>Wachtwoord</mat-label>
+                        <input matInput formControlName="password" type="password"> 
+                    </mat-form-field>
+
+                    <div class="w-full">
+                        <button mat-raised-button color="primary" class="w-full" type="submit">Inloggen</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>

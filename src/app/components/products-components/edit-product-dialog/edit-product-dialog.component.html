@@ -1,0 +1,53 @@
+<div class="p-6 pb-0">
+  <h2>Edit product</h2>
+</div>
+<div class="max-h-[70vh] overflow-y-auto p-4">
+  <form [formGroup]="productForm" class="p-6">
+    <mat-checkbox formControlName="isPopular" class="mt-0 mb-2">Mark as Popular</mat-checkbox>
+    <mat-form-field class="w-full">
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Category</mat-label>
+      <mat-select matInput formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category.name">
+          {{ category.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <input matInput type="text" formControlName="description">
+    </mat-form-field>
+    <div class="file-upload mb-5">
+      <input type="file" id="file" class="file-input" multiple (change)="onFilesSelected($event)">
+    </div>
+
+    <div class="flex items-end">
+      <div class="w-1/4 border rounded p-1 m-1" *ngIf="displayedImages.length > 0">
+        <img [src]="displayedImages[0].file" alt="Home Page Image" class="w-full h-64 object-cover cursor-pointer"
+          style="width: 160px; height: 160px;">
+        <button (click)="removeDisplayedImage(0)">Remove</button>
+        <button (click)="triggerFileInput($event, 0)">Select File</button>
+        <input style="display: none;" type="file" (change)="replaceDisplayedImage($event, 0,displayedImages[0].index)">
+      </div>
+      <ng-container *ngFor="let imgUrl of displayedImages.slice(1); let i = index">
+        <div class="w-1/4 border rounded p-1 m-1">
+          <img [src]="imgUrl.file" alt="Product Image" class="w-full h-32 object-cover cursor-pointer">
+          <button (click)="removeDisplayedImage(i + 1)">Remove</button>
+          <button (click)="triggerFileInput($event, i + 1)">Select File</button>
+          <input style="display: none;" type="file" #fileInput
+            (change)="replaceDisplayedImage($event, i + 1, imgUrl.index)">
+        </div>
+      </ng-container>
+
+    </div>
+    <button mat-raised-button color="primary" (click)="save()"
+      class="w-full py-4 mt-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-700"> Edit Product</button>
+  </form>
+</div>

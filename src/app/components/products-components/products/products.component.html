@@ -1,0 +1,144 @@
+<div class="mx-auto w-3/4">
+    <div class="flex justify-between items-center py-10">
+        <mat-checkbox class="ml-40 " [(ngModel)]="showPopularOnly" (change)="showPopularOnlyProducts()">
+            Show Only Popular Products
+        </mat-checkbox>
+        <div class="px-4" style="width: 200px;">
+            <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Select a category</mat-label>
+                <mat-select [(value)]="selectedCategory" (selectionChange)="OnshowCategoty($event.value)">
+                    <mat-option *ngFor="let category of categories" [value]="category.name">
+                        {{ category.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" (click)="openAddProductDialog()">
+            Voeg nieuw product toe
+        </button>
+    </div>
+      <mat-card class="max-w-7xl mx-auto">
+          <table mat-table [dataSource]="dataSource" class="w-full mat-elevation-z8">
+              <ng-container matColumnDef="product">
+                  <th mat-header-cell *matHeaderCellDef>Product</th>
+                  <td mat-cell *matCellDef="let element">
+                      <img [src]="element.imageUrls[0].file" alt="product" class="w-[100px] my-5" />
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Naam</th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.isPopular" class="text-yellow-500 mr-2">star</mat-icon>
+                    <span class="truncate max-w-xs block">{{ element.title }}</span>
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            
+              <ng-container matColumnDef="category">
+                  <th mat-header-cell *matHeaderCellDef>Categorie</th>
+                  <td mat-cell *matCellDef="let element">
+                      <span class="truncate max-w-xs block">{{ element.categoryName }}</span>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef>Prijs</th>
+                  <td mat-cell *matCellDef="let element">{{ element.price | currency:'EUR' }}</td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                  Actie
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button [matMenuTriggerFor]="menu">
+                          <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                          <button mat-menu-item (click)="editProduct(element)">
+                              <mat-icon>edit</mat-icon>
+                              <span>Bewerken</span>
+                          </button>
+                          <button mat-menu-item (click)="openConfirmDialog(element)">
+                              <mat-icon>close</mat-icon>
+                              <span>Verwijderen</span>
+                          </button>
+                      </mat-menu>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+          </table>
+      </mat-card>
+    
+      <div class="pt-5 mt-[20px] border-t border-gray-300 w-full px-4"  *ngIf="!showPopularOnly">
+        <div
+          class="flex flex-col md:flex-row justify-between text-center md:text-start"
+        >
+          <div class="text-sm">
+            <p>
+                Showing {{ (currentPage - 1) * pageSize + 1 }} -
+              {{
+                Math.min(
+                  currentPage * pageSize,
+                  totalProductsOfCategory!
+                )
+              }}
+              of {{ totalProductsOfCategory }}
+            </p>
+          </div>
+          <ul class="flex items-center space-x-2">
+            <li
+              class="flex-1 text-left"
+              *ngIf="
+                
+                (totalProductsOfCategory! > pageSize || currentPage > 1)
+              "
+            >
+              <div
+                class="text-sm flex items-center"
+                (click)="previousPage()"
+              >
+                <mat-icon>chevron_left</mat-icon>
+                <span>Previous</span>
+              </div>
+            </li>
+    
+            <li
+              *ngFor="
+                let page of [].constructor(totalPages);
+                let i = index
+              "
+              [class.bg-blue-500]="i + 1 === currentPage"
+              [class.text-white]="i + 1 === currentPage"
+            >
+              <div
+                class="text-sm cursor-pointer px-2 py-1 hover:bg-blue-600"
+                (click)="goToPage(i + 1)"
+              >
+                {{ i + 1 }}
+              </div>
+            </li>
+            <li
+              class="flex-1 text-right"
+              *ngIf="
+                currentPage < totalPages && !showPopularOnly &&
+                (totalProductsOfCategory! > pageSize || currentPage > 1)
+              "
+            >
+              <div
+                class="text-sm flex items-center justify-end"
+                (click)="nextPage()"
+              >
+                <span>Next</span>
+                <mat-icon>chevron_right</mat-icon>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    

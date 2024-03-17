@@ -1,0 +1,33 @@
+<mat-toolbar class="mx-auto bg-blue-500 text-white" *ngIf="isLoggedIn">
+  <mat-toolbar-row class="justify-between px-5">
+    <button mat-icon-button (click)="toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <a routerLink="/products" class="text-xl">Admin</a>
+    <button mat-button (click)="onLogout()">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="example-container h-full" *ngIf="isLoggedIn">
+  <mat-sidenav #sidenav class="w-64 bg-blue-500 text-white" [ngClass]="{'sidenav-collapsed': isSidenavCollapsed}" mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/categories" routerLinkActive="active" class="my-2">
+        <mat-icon class="mr-2">category</mat-icon> <span class="sidenav-text">Categories</span>
+      </a>
+      <a mat-list-item routerLink="/products" routerLinkActive="active" class="my-2">
+        <mat-icon class="mr-2">shopping_cart</mat-icon> <span class="sidenav-text">Products</span>
+      </a>
+      <a mat-list-item routerLink="/customers" routerLinkActive="active" class="my-2">
+        <mat-icon class="mr-2">people</mat-icon> <span class="sidenav-text">Customers</span>
+      </a>
+      <a mat-list-item routerLink="/order" routerLinkActive="active" class="my-2">
+        <mat-icon class="mr-2">assignment</mat-icon> <span class="sidenav-text">Orders</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
