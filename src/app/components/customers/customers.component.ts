@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { Customer } from 'src/app/class/customer';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { UserRegistration } from 'src/app/class/UserRegistration';
 import { CustomersService } from 'src/app/service/customers.service';
 
 @Component({
@@ -8,27 +9,55 @@ import { CustomersService } from 'src/app/service/customers.service';
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.css'],
 })
-export class CustomersComponent {
+export class CustomersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
-    'recipientName',
-    'customerEmail',
-    'phoneNumber',
-    'city',
-    'line1',
+    'bedrijfsNaam', 'kvkNummer', 'name', 'phoneNumber', 'city', 'adres', 'isApprove', 'action', 
   ];
-  dataSource: Customer[] = [];
+  dataSource: UserRegistration[] = [];
   private unsubscribe$ = new Subject<void>();
-  constructor(public customerService: CustomersService) {}
+  isAitmaten: boolean = false;
+
+  constructor(private customerService: CustomersService) {}
 
   ngOnInit(): void {
-    this.getOrders();
+    this.determineUserType();
+    this.getAllUsers();
   }
-  getOrders() {
-    this.customerService
-      .getCustomers()
+
+  private determineUserType() {
+    const adminString = localStorage.getItem('Admin');
+    if (adminString) {
+      const adminObject = JSON.parse(adminString);
+      this.isAitmaten = adminObject.username === 'SofaniMarket';
+      if (this.isAitmaten) {
+        this.displayedColumns = this.displayedColumns.filter(col => !['bedrijfsNaam', 'kvkNummer', 'isApprove'].includes(col));
+      }
+    }
+  }
+
+  getAllUsers() {
+    this.customerService.getAllUsers()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((customers: Customer[]) => {
+      .subscribe((customers: UserRegistration[]) => {
         this.dataSource = customers;
+        console.log("this.dataSource", this.dataSource)
       });
+  }
+
+  approveUser(userId: string) {
+    this.customerService.approveUser(userId).subscribe(() => {
+      this.getAllUsers(); // Refresh list after approval
+    });
+  }
+
+  rejectUser(userId: string) {
+    this.customerService.rejectUser(userId).subscribe(() => {
+      this.getAllUsers(); // Refresh list after rejection
+    });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

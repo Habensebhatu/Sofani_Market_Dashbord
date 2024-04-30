@@ -1,4 +1,4 @@
-import { Product } from "./class";
+import { Product } from "./product";
 import { OrderDetails } from "./orderDetails.class";
 
 
@@ -33,7 +33,7 @@ export class Order {
     }
   
     calculateTotal(): number {
-      return this.products.reduce((total, product) => total + product.price, 0);
+      return this.products.reduce((total, product) => total + product.cratePrice, 0);
     }
   }
   

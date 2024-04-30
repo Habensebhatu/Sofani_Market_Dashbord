@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup} from '@angular/forms';
 import { Category } from 'src/app/class/category.class';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from 'src/app/service/category.service';
 import { ProductService } from 'src/app/service/product.service';
-import { Product } from 'src/app/class/class';
+import { Product } from 'src/app/class/product';
 import { Subject, takeUntil } from 'rxjs';
 import { ImageUpdateModel } from 'src/app/class/ImageUpdateModel';
 
@@ -18,27 +18,36 @@ export class EditProductDialogComponent {
   categories: Category[] = [];
   private unsubscribe$ = new Subject<void>();
   displayedImages:  ImageUpdateModel[] = [];
+  isAitmaten: boolean = false;
   constructor(public dialogRef: MatDialogRef<EditProductDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product, private fb: FormBuilder, private categoryService: CategoryService,
     private productService: ProductService) {
-      // Map each URL to the new object structure
       this.displayedImages = data.imageUrls ? data.imageUrls.map(imageInfo => ({
         file: imageInfo.file, index: imageInfo.index, isNew: false 
       })) : [];
-      // this.displayedImages = data.imageUrls
-     
       
       this.productForm = this.fb.group({
-          title: [data.title],
-          price: [data.price],
-          category: [data.categoryName],
-          description: [data.description],
-          isPopular: [data.isPopular],  
-          image: [data.isPopular]  // This remains unchanged if your form still expects a string[]
+        title: [data.title],
+        piecePrice: [data.piecePrice],
+        kilo: [data.kilo],
+        instokeOfPiece: [data.instokeOfPiece],
+        cratePrice : [data.cratePrice],
+        crateQuantity: [data.crateQuantity],
+        instokeOfCrate: [data.instokeOfCrate],
+        category: [data.categoryName],
+        description: [data.description],
+        isPopular: [data.isPopular],  
+        image: [data.isPopular]
       });
-     
+      this.determineUserType();
 }
-
+private determineUserType() {
+  const adminString = localStorage.getItem('Admin');
+  if (adminString) {
+    const adminObject = JSON.parse(adminString);
+    this.isAitmaten = adminObject.username === 'Aitmaten';
+  }
+}
   ngOnInit(): void {
     this.getCatogories();
     console.log("this.displayedImages", this.displayedImages)

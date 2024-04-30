@@ -1,0 +1,28 @@
+.action-buttons {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Align the buttons vertically */
+    gap: 8px; /* Space between buttons */
+  }
+  
+  .mat-icon-button {
+    transition: transform 0.3s ease; /* Smooth transition for a hover effect */
+  }
+  
+  .mat-icon-button:hover {
+    transform: scale(1.1); /* Slightly enlarge buttons on hover */
+    cursor: pointer; /* Indicates the element is clickable */
+  }
+  
+  .approve-icon {
+    color: green; /* Green color for approve icon */
+  }
+  
+  .reject-icon {
+    color: red; /* Red color for reject icon */
+  }
+
+  .watch-icon{
+    color: #FFA500;
+  }
+  

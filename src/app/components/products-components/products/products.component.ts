@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
-import { Product } from 'src/app/class/class';
+import { Product } from 'src/app/class/product';
 import { ProductService } from 'src/app/service/product.service';
 import { AddProductComponent } from '../add-product/add-product.component';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -71,6 +71,8 @@ export class ProductsComponent implements OnInit, OnDestroy  {
       this.productService.getProducts().pipe(takeUntil(this.unsubscribe$))
     .subscribe((data: Product[]) => {
       this.totalProductsOfCategory = data.length
+      this.dataSource = data
+      console.log("data",  data)
     });
     }
    

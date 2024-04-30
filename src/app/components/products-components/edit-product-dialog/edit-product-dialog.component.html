@@ -4,29 +4,50 @@
 <div class="max-h-[70vh] overflow-y-auto p-4">
   <form [formGroup]="productForm" class="p-6">
     <mat-checkbox formControlName="isPopular" class="mt-0 mb-2">Mark as Popular</mat-checkbox>
-    <mat-form-field class="w-full">
-      <mat-label>Title</mat-label>
+    <mat-form-field class="w-full" >
+      <mat-label>Titel</mat-label>
       <input matInput type="text" formControlName="title">
     </mat-form-field>
     <mat-form-field class="w-full">
-      <mat-label>Price</mat-label>
-      <input matInput type="number" formControlName="price">
+      <mat-label>Verkoopprijs</mat-label>
+      <input matInput type="number" formControlName="piecePrice">
     </mat-form-field>
     <mat-form-field class="w-full">
-      <mat-label>Category</mat-label>
+      <mat-label>kilo </mat-label>
+      <input matInput type="number" formControlName="kilo">
+    </mat-form-field>
+    <mat-form-field class="w-full" *ngIf="isAitmaten">
+      <mat-label>Aantal op voorraad (in stuks of in kilo) </mat-label>
+      <input matInput type="number" formControlName="instokeOfPiece">
+    </mat-form-field>
+    <mat-form-field class="w-full" *ngIf="isAitmaten">
+      <mat-label>Verkoopprijs Inhoud </mat-label>
+      <input matInput type="number" formControlName="cratePrice">
+    </mat-form-field>
+    <mat-form-field class="w-full" *ngIf="isAitmaten">
+      <mat-label>Aantal Inhoud</mat-label>
+      <input matInput type="text" formControlName="crateQuantity">
+    </mat-form-field>
+    <mat-form-field class="w-full" *ngIf="isAitmaten">
+      <mat-label>Op voorraad Inhoud</mat-label>
+      <input matInput type="text" formControlName="instokeOfCrate">
+    </mat-form-field>
+    <mat-form-field class="w-full">
+      <mat-label>Categorie</mat-label>
       <mat-select matInput formControlName="category">
-        <mat-option *ngFor="let category of categories" [value]="category.name">
+        <mat-option *ngFor="let category of categories" [value]="category">
           {{ category.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="w-full">
-      <mat-label>Description</mat-label>
+      <mat-label>{{ isAitmaten ? 'Land van Oorsprong' : 'Beschrijving' }}</mat-label>
       <input matInput type="text" formControlName="description">
     </mat-form-field>
-    <div class="file-upload mb-5">
+    <div class="file-upload mb-5 pb-0">
       <input type="file" id="file" class="file-input" multiple (change)="onFilesSelected($event)">
-    </div>
+  </div>
+  
 
     <div class="flex items-end">
       <div class="w-1/4 border rounded p-1 m-1" *ngIf="displayedImages.length > 0">
