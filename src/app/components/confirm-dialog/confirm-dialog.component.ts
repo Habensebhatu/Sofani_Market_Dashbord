@@ -4,10 +4,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-confirm-dialog',
   template: `
-    <h1 mat-dialog-title>Are you sure?</h1>
+    <h1 mat-dialog-title>Weet je het zeker?</h1>
     <div mat-dialog-actions>
-      <button mat-button (click)="onNoClick()">Cancel</button>
-      <button mat-button cdkFocusInitial (click)="onYesClick()">Delete</button>
+      <button mat-button (click)="onNoClick()">Annuleren</button>
+      <button mat-button cdkFocusInitial (click)="onYesClick()">verwijderen</button>
     </div>
   `,
 })
